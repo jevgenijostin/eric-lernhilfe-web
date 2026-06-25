@@ -307,8 +307,13 @@ var Chess=function(r){var e="b",n="w",t=-1,o="p",i="b",f="k",u="rnbqkbnr/ppppppp
    computer opponent, captured tray. German UI; the human plays White (bottom). */
 (function () {
   "use strict";
-  const GLYPH = { wk:"♚",wq:"♛",wr:"♜",wb:"♝",wn:"♞",wp:"♟",
-                  bk:"♚",bq:"♛",br:"♜",bb:"♝",bn:"♞",bp:"♟" };
+  // U+FE0E = text-presentation selector: forces monochrome TEXT glyphs so CSS color()
+  // applies. Without it, iOS renders the pawn (♟) as a colored emoji that ignores the
+  // white fill, making white pawns look dark/different from the other pieces.
+  const VS = String.fromCharCode(0xFE0E);  // text-presentation selector (U+FE0E)
+  const BASE = { k:"♚", q:"♛", r:"♜", b:"♝", n:"♞", p:"♟" };
+  const GLYPH = {};
+  for (const color of ["w", "b"]) for (const t in BASE) GLYPH[color + t] = BASE[t] + VS;
   const FILES = "abcdefgh";
   const E = window.ChessEngine;
 
