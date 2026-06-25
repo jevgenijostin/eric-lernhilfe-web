@@ -39,9 +39,9 @@ h1{font-size:22px;margin:4px 0 2px;display:flex;align-items:center;gap:8px}
 .status.tip{border-color:var(--accent)}
 
 .boardwrap{display:flex;justify-content:center}
-.board{display:grid;grid-template-columns:repeat(8,1fr);width:min(92vw,460px);max-width:100%;
-  aspect-ratio:1/1;border:5px solid #3a4566;border-radius:10px;overflow:hidden;
-  box-shadow:0 10px 30px rgba(0,0,0,.4);touch-action:manipulation}
+.board{display:grid;grid-template-columns:repeat(8,1fr);grid-template-rows:repeat(8,1fr);
+  width:min(92vw,460px);max-width:100%;aspect-ratio:1/1;border:5px solid #3a4566;border-radius:10px;
+  overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.4);touch-action:manipulation}
 .sq{position:relative;display:flex;align-items:center;justify-content:center;min-width:0;min-height:0;
   overflow:hidden;font-size:min(9.5vw,52px);line-height:1;cursor:pointer;user-select:none}
 .sq.light{background:var(--light)} .sq.dark{background:var(--dark)}
