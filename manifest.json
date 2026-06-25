@@ -1,0 +1,12 @@
+{
+  "name": "Schach-Trainer für Eric",
+  "short_name": "Schach",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#1d2330",
+  "theme_color": "#1d2330",
+  "icons": [
+    { "src": "icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}
