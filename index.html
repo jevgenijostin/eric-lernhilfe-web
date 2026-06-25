@@ -430,6 +430,13 @@ var Chess=function(r){var e="b",n="w",t=-1,o="p",i="b",f="k",u="rnbqkbnr/ppppppp
   }
   function clearSel() { selected = null; legalForSel = []; }
 
+  // verbose move text for a kid: "Bauer E2 → E4" (+ "schlägt die Dame" on a capture)
+  function moveStr(m) {
+    let s = E.DE[m.piece] + " " + m.from.toUpperCase() + " → " + m.to.toUpperCase();
+    if (m.captured) s += " (schlägt " + E.DE_AKK[m.captured] + ")";
+    return s;
+  }
+
   function doHumanMove(move) {
     // auto-queen promotion for simplicity
     const opts = { from: move.from, to: move.to };
@@ -440,7 +447,7 @@ var Chess=function(r){var e="b",n="w",t=-1,o="p",i="b",f="k",u="rnbqkbnr/ppppppp
     render();
     if (announceEnd()) return;
     busy = true;
-    setStatus("Der Computer überlegt… 🤖", "");
+    setStatus(`Du zogst: <b>${moveStr(m)}</b>. Der Computer überlegt… 🤖`, "");
     setTimeout(computerTurn, 350);
   }
 
@@ -451,8 +458,8 @@ var Chess=function(r){var e="b",n="w",t=-1,o="p",i="b",f="k",u="rnbqkbnr/ppppppp
       lastMove = { from: mv.from, to: mv.to };
       render();
       if (announceEnd()) { busy = false; return; }
-      if (game.in_check()) setStatus("Schach! 👑 Dein König wird angegriffen — schütze ihn!", "warn");
-      else setStatus(`Der Computer zog <b>${mv.san}</b>. Du bist dran! ♟️`, "");
+      if (game.in_check()) setStatus(`Schach! 👑 Der Computer zog <b>${moveStr(mv)}</b> und greift deinen König an!`, "warn");
+      else setStatus(`Der Computer zog: <b>${moveStr(mv)}</b>. Du bist dran! ♟️`, "");
     }
     busy = false;
   }
@@ -460,13 +467,13 @@ var Chess=function(r){var e="b",n="w",t=-1,o="p",i="b",f="k",u="rnbqkbnr/ppppppp
   function announceEnd() {
     if (game.in_checkmate()) {
       const youWon = game.turn() === "b";
-      setStatus(youWon ? "🏆 <span class='big'>Schachmatt — du hast gewonnen! Super gespielt!</span>"
-                       : "😅 <span class='big'>Schachmatt. Der Computer gewinnt — neues Spiel?</span>",
+      setStatus(youWon ? "🏆 <span class='big'>Schachmatt! Du hast gewonnen! Super gespielt!</span>"
+                       : "😅 <span class='big'>Schachmatt. Der Computer gewinnt. Neues Spiel?</span>",
                 youWon ? "good" : "warn");
       return true;
     }
-    if (game.in_stalemate()) { setStatus("Patt! 🤝 Unentschieden — der König kann nicht ziehen, steht aber nicht im Schach.", "tip"); return true; }
-    if (game.in_draw()) { setStatus("Remis 🤝 — unentschieden.", "tip"); return true; }
+    if (game.in_stalemate()) { setStatus("Patt! 🤝 Unentschieden. Der König kann nicht ziehen, steht aber nicht im Schach.", "tip"); return true; }
+    if (game.in_draw()) { setStatus("Remis 🤝 Unentschieden.", "tip"); return true; }
     return false;
   }
 
@@ -483,7 +490,7 @@ var Chess=function(r){var e="b",n="w",t=-1,o="p",i="b",f="k",u="rnbqkbnr/ppppppp
     const toCell = boardEl.querySelector(`[data-square="${m.to}"]`);
     if (fromCell) fromCell.classList.add("sel");
     if (toCell) toCell.classList.add("sel");
-    setStatus(`💡 <b>Tipp:</b> Ziehe <span class="hintmove">${E.DE[m.piece]} nach ${m.to}</span>. ` +
+    setStatus(`💡 <b>Tipp:</b> Ziehe <span class="hintmove">${E.DE[m.piece]} ${m.from.toUpperCase()} → ${m.to.toUpperCase()}</span>. ` +
               E.explainMove(game, m), "tip");
   }
 
